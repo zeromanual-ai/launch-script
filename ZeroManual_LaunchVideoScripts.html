@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZeroManual — Launch Video Scripts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --off-white: #f4f1ec;
+    --accent: #e8c547;
+    --mid: #1e1e1e;
+    --border: #2e2e2e;
+    --muted: #888;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: 'ZM';
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Syne', sans-serif;
+    font-size: 360px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+  }
+
+  .cover-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+    font-weight: 500;
+  }
+
+  .cover h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+
+  .cover p {
+    color: var(--muted);
+    max-width: 480px;
+    font-size: 15px;
+    line-height: 1.8;
+  }
+
+  .meta-row {
+    display: flex;
+    gap: 40px;
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .meta-item label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .meta-item span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  /* Script container */
+  .script-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .script-number {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .script-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .script-tagline {
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 40px;
+    font-size: 14px;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 48px;
+  }
+
+  .overview-cell {
+    background: var(--mid);
+    padding: 20px;
+  }
+
+  .overview-cell label {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .overview-cell span {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--off-white);
+  }
+
+  /* Scene blocks */
+  .scene {
+    margin-bottom: 36px;
+    border-left: 2px solid var(--border);
+    padding-left: 24px;
+    position: relative;
+  }
+
+  .scene.active-scene {
+    border-left-color: var(--accent);
+  }
+
+  .scene-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .scene-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+
+  .tag-open { background: rgba(232,197,71,0.15); color: var(--accent); }
+  .tag-founder { background: rgba(100,180,255,0.12); color: #64b4ff; }
+  .tag-team { background: rgba(120,220,150,0.12); color: #78dc96; }
+  .tag-broll { background: rgba(255,255,255,0.06); color: var(--muted); }
+  .tag-overlay { background: rgba(255,100,100,0.12); color: #ff8a8a; }
+  .tag-close { background: rgba(200,150,255,0.12); color: #c896ff; }
+
+  .scene-time {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+  }
+
+  .dialogue-block {
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 12px;
+  }
+
+  .speaker {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    font-weight: 600;
+  }
+
+  .dialogue {
+    font-size: 16px;
+    line-height: 1.75;
+    font-style: italic;
+    color: var(--off-white);
+  }
+
+  .direction {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    font-style: normal;
+  }
+
+  .direction strong {
+    color: #aaa;
+  }
+
+  .broll-block {
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+
+  .broll-block p {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .broll-block p strong {
+    color: #aaa;
+    font-weight: 500;
+  }
+
+  .overlay-block {
+    background: rgba(255,255,255,0.05);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .overlay-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--off-white);
+  }
+
+  .overlay-note {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* Editing style section */
+  .style-section {
+    background: var(--mid);
+    border-radius: 10px;
+    padding: 28px 28px;
+    margin-top: 48px;
+  }
+
+  .style-section h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--accent);
+  }
+
+  .style-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .style-item label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .style-item p {
+    font-size: 13px;
+    color: var(--off-white);
+    line-height: 1.6;
+  }
+
+  /* Cast block */
+  .cast-block {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  .cast-card {
+    flex: 1;
+    min-width: 160px;
+    background: var(--mid);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+
+  .cast-card .role {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .cast-card .name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .cast-card .desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 40px 0;
+  }
+
+  /* References */
+  .refs-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+  }
+
+  .refs-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .refs-section p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 32px;
+  }
+
+  .ref-card {
+    background: var(--mid);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .ref-num {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    color: var(--accent);
+    min-width: 32px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+
+  .ref-body h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .ref-body .url {
+    font-size: 12px;
+    color: #64b4ff;
+    margin-bottom: 8px;
+  }
+
+  .ref-body p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 0;
+    line-height: 1.6;
+  }
+
+  .why-tag {
+    display: inline-block;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(232,197,71,0.1);
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  footer span {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+  }
+
+  footer p {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    .cover, .script-section, .refs-section { padding: 48px 24px; }
+    footer { padding: 24px; }
+    .cover::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="cover">
+  <p class="cover-label">Internal Production Document · Confidential</p>
+  <h1>ZeroManual<br>Launch Video Scripts</h1>
+  <p>Two complete script options for the company launch video — including full dialogue, speaker assignments, shot direction, editing style, and visual reference links.</p>
+  <div class="meta-row">
+    <div class="meta-item"><label>Tone</label><span>Founder-Led & Authentic</span></div>
+    <div class="meta-item"><label>Audience</label><span>General Public / Brand Awareness</span></div>
+    <div class="meta-item"><label>Cast</label><span>1 Co-Founder + 3 Team Members</span></div>
+    <div class="meta-item"><label>Options</label><span>2 Full Scripts</span></div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  SCRIPT 1                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="script-section">
+  <p class="script-number">Script Option 01</p>
+  <h2 class="script-title">"Built for This"</h2>
+  <p class="script-tagline">A bold manifesto. The founder speaks first, the team amplifies, the world responds.</p>
+
+  <div class="overview-grid">
+    <div class="overview-cell"><label>Duration</label><span>2:00 – 2:30 min</span></div>
+    <div class="overview-cell"><label>Pacing</label><span>Punchy → Building</span></div>
+    <div class="overview-cell"><label>Opening</label><span>Black screen + VO</span></div>
+    <div class="overview-cell"><label>Music</label><span>Low drone → cinematic swell</span></div>
+    <div class="overview-cell"><label>Camera</label><span>Direct-to-lens, close</span></div>
+    <div class="overview-cell"><label>Text Overlays</label><span>Frequent, white/minimal</span></div>
+  </div>
+
+  <!-- Cast -->
+  <div class="cast-block">
+    <div class="cast-card">
+      <span class="role">On-Screen Role</span>
+      <p class="name">Co-Founder</p>
+      <p class="desc">Anchor of the video. Opens, closes, and carries the manifesto. Direct to camera throughout.</p>
+    </div>
+    <div class="cast-card">
+      <span class="role">Team Member 1</span>
+      <p class="name">The Research Voice</p>
+      <p class="desc">Speaks to depth of understanding — why ZeroManual studies industries differently.</p>
+    </div>
+    <div class="cast-card">
+      <span class="role">Team Member 2</span>
+      <p class="name">The Builder Voice</p>
+      <p class="desc">Speaks to what is being built — the infrastructure angle, not just software.</p>
+    </div>
+    <div class="cast-card">
+      <span class="role">Team Member 3</span>
+      <p class="name">The Vision Voice</p>
+      <p class="desc">Speaks to the bigger picture — Asia's enterprises, the stakes, the moment.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 1: COLD OPEN -->
+  <div class="scene active-scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-open">Cold Open</span>
+      <span class="scene-time">0:00 – 0:18</span>
+    </div>
+    <div class="broll-block">
+      <p><strong>VISUAL:</strong> Pure black screen for 2 seconds. Then — fast cut montage. No music yet. Only ambient sound. A factory floor in Bangladesh. A logistics hub at 3AM. A shipping container port. A distribution centre. Workers, machines, movement. Real. Unglamorous. Alive.</p>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Voiceover (not yet on camera)</p>
+      <p class="dialogue">"These are not background businesses. These are the operations the global economy depends on."</p>
+      <p class="direction"><strong>Delivery note:</strong> Quiet. Certain. Not dramatic — just true. Let the images carry the weight.</p>
+    </div>
+    <div class="overlay-block">
+      <p class="overlay-text">Asia's industries. Running the world.</p>
+      <p class="overlay-note">White text, center-screen. Hold 2 seconds. Fade.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 2: THE PROBLEM -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-founder">Founder — On Camera</span>
+      <span class="scene-time">0:18 – 0:50</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Direct to Camera</p>
+      <p class="dialogue">"The AI revolution is real. But almost everything being built right now was designed for someone else — for stable regulatory environments, for clean data, for English-language systems, for markets that look nothing like Dhaka or Jakarta or Karachi.<br><br>
+      When those systems arrive here... they break. Not because the technology is wrong. Because it was never researched for this."</p>
+      <p class="direction"><strong>Shot:</strong> Medium close-up. Slightly off-centre framing. Plain background or soft industrial setting. Holds eye contact. Not reading — speaking.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 3: TEAM VOICE 1 -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-team">Team Member 1</span>
+      <span class="scene-time">0:50 – 1:05</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Team Member 1 — Direct to Camera</p>
+      <p class="dialogue">"Most AI companies skip the research. They take a product they already built and configure it for a new client. We don't do that. Before we architect anything, we go deep — into the workflows, the exception cases, the failure modes that destroy generic systems in month three."</p>
+      <p class="direction"><strong>Shot:</strong> Similar framing to founder. Different environment — perhaps near a whiteboard, desk, or natural window light. Conversational, not rehearsed.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 4: TEAM VOICE 2 -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-team">Team Member 2</span>
+      <span class="scene-time">1:05 – 1:18</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Team Member 2 — Direct to Camera</p>
+      <p class="dialogue">"What we build is not software configured to a client's settings. It's AI infrastructure — designed to become the operational foundation of an enterprise. And to compound in value over time."</p>
+      <p class="direction"><strong>Shot:</strong> Slightly tighter. The word "infrastructure" should feel weighty — pause slightly before it.</p>
+    </div>
+    <div class="overlay-block">
+      <p class="overlay-text">Not software. Infrastructure.</p>
+      <p class="overlay-note">Text appears on cut, white, minimalist. 1.5 seconds.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 5: TEAM VOICE 3 -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-team">Team Member 3</span>
+      <span class="scene-time">1:18 – 1:32</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Team Member 3 — Direct to Camera</p>
+      <p class="dialogue">"The enterprises that move now are the ones that will own their categories. The window is open. It will not stay open forever. And for the first time, someone is building AI specifically for how these businesses actually operate."</p>
+      <p class="direction"><strong>Shot:</strong> Medium shot. Slight lean-forward energy — urgency without shouting.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 6: FOUNDER RETURN -->
+  <div class="scene active-scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-founder">Founder — Return</span>
+      <span class="scene-time">1:32 – 2:00</span>
+    </div>
+    <div class="broll-block">
+      <p><strong>VISUAL:</strong> Brief B-roll return — same factories, same ports, same logistics centres. But now the music swells. Energy shifts. These are no longer scenes of a problem. They are scenes of opportunity.</p>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Direct to Camera</p>
+      <p class="dialogue">"We are ZeroManual. We are an AI research and deployment company building the infrastructure that transforms what Asian enterprises are capable of — enterprise by enterprise, industry by industry.<br><br>
+      If you are building one of those enterprises — we should talk."</p>
+      <p class="direction"><strong>Shot:</strong> Return to the same framing as opening. Slight smile on last line — earned, not performed. Confident stillness.</p>
+    </div>
+    <div class="overlay-block">
+      <p class="overlay-text">Zero Manual.<br><span style="font-size:14px;font-family:'DM Sans',sans-serif;font-style:italic;font-weight:300;color:#aaa;">The AI backbone of industry.</span></p>
+      <p class="overlay-note">Final card. Hold 3–4 seconds. Website URL below. Clean fade out.</p>
+    </div>
+  </div>
+
+  <!-- Editing Style -->
+  <div class="style-section">
+    <h3>Editing & Production Style — Script 01</h3>
+    <div class="style-grid">
+      <div class="style-item">
+        <label>Colour Grade</label>
+        <p>Desaturated, slightly cool. Industrial tones. Deep shadows. Not too polished — keep it raw and credible.</p>
+      </div>
+      <div class="style-item">
+        <label>Cuts</label>
+        <p>Hard cuts throughout. No dissolves. Brief pauses between speakers to let the words land.</p>
+      </div>
+      <div class="style-item">
+        <label>Music</label>
+        <p>Cold open: silent or ambient noise only. Builds from 0:18 onward — low, textured, cinematic. Full swell at final B-roll sequence. No lyrics.</p>
+      </div>
+      <div class="style-item">
+        <label>Text Overlays</label>
+        <p>White. No-frills. Medium-weight sans-serif. Appears on hard cuts — never animated in fancy ways. Feels like a statement, not a design element.</p>
+      </div>
+      <div class="style-item">
+        <label>Camera Movement</label>
+        <p>Minimal. Mostly locked-off. Slight push-in on key lines. Handheld only for B-roll.</p>
+      </div>
+      <div class="style-item">
+        <label>Aspect Ratio</label>
+        <p>16:9 for primary. Export a 9:16 vertical cut for social reels — team member lines work well as individual clips.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  SCRIPT 2                                          -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="script-section">
+  <p class="script-number">Script Option 02</p>
+  <h2 class="script-title">"We Went In"</h2>
+  <p class="script-tagline">Origin story format. The founder explains the founding insight personally — why ZeroManual exists from lived observation, not theory.</p>
+
+  <div class="overview-grid">
+    <div class="overview-cell"><label>Duration</label><span>2:30 – 3:00 min</span></div>
+    <div class="overview-cell"><label>Pacing</label><span>Steady, story-driven</span></div>
+    <div class="overview-cell"><label>Opening</label><span>Founder, mid-sentence</span></div>
+    <div class="overview-cell"><label>Music</label><span>Warm, subtle, consistent</span></div>
+    <div class="overview-cell"><label>Camera</label><span>Interview-style + walkaround</span></div>
+    <div class="overview-cell"><label>Text Overlays</label><span>Sparse — only for impact</span></div>
+  </div>
+
+  <!-- Cast -->
+  <div class="cast-block">
+    <div class="cast-card">
+      <span class="role">On-Screen Role</span>
+      <p class="name">Co-Founder</p>
+      <p class="desc">Tells the story personally. Slightly more casual framing — like they're explaining to a friend what they've seen and why it matters.</p>
+    </div>
+    <div class="cast-card">
+      <span class="role">Team Member 1</span>
+      <p class="name">The "We Studied It" Voice</p>
+      <p class="desc">Validates the research angle — what deep operational study actually looks like at ZeroManual.</p>
+    </div>
+    <div class="cast-card">
+      <span class="role">Team Member 2</span>
+      <p class="name">The "We Built It" Voice</p>
+      <p class="desc">Explains the deployment reality — what AI infrastructure means in practice.</p>
+    </div>
+    <div class="cast-card">
+      <span class="role">Team Member 3</span>
+      <p class="name">The "This Is The Moment" Voice</p>
+      <p class="desc">Speaks to the timing and urgency — why this matters now, not in five years.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 1: COLD OPEN -->
+  <div class="scene active-scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-founder">Founder — Cold Open</span>
+      <span class="scene-time">0:00 – 0:22</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Slightly Casual, Mid-Thought Energy</p>
+      <p class="dialogue">"I kept seeing the same thing happen. A company in manufacturing, logistics, distribution — a genuinely world-class operation — would try to bring in AI. They'd spend months on it. And by month three, the system was either abandoned or so heavily modified it barely functioned.<br><br>And the reason was always the same. The AI was built for a different world."</p>
+      <p class="direction"><strong>Shot:</strong> Medium close-up. Could be walking and then stopping to address camera directly. Natural setting — an office, a workspace. Warm lighting. Feels like a conversation, not a speech.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 2: B-ROLL PIVOT -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-broll">B-Roll</span>
+      <span class="scene-time">0:22 – 0:35</span>
+    </div>
+    <div class="broll-block">
+      <p><strong>VISUAL:</strong> Shots of real Asian enterprise environments. Manufacturing. Freight. A call centre. A distribution warehouse. Busy, complex, real. Not stock footage aesthetic — grittier if possible.</p>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Voiceover during B-Roll</p>
+      <p class="dialogue">"These businesses — in Dhaka, Jakarta, Karachi, Ho Chi Minh City — they're not peripheral. They are running the global economy. And they've been handed AI that doesn't know they exist."</p>
+    </div>
+  </div>
+
+  <!-- SCENE 3: TEAM 1 -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-team">Team Member 1</span>
+      <span class="scene-time">0:35 – 0:52</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Team Member 1 — Conversational</p>
+      <p class="dialogue">"When we go into an industry, we're not going in to configure a product. We study how the industry actually works — the logic underneath the workflows, the exception cases that nobody writes down, the failure modes that only show up in live operations. That research is what we build from."</p>
+      <p class="direction"><strong>Shot:</strong> Interview framing — slight off-axis. Could be seated. Relaxed but focused. Feels like someone explaining something they genuinely care about, not a sales pitch.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 4: FOUNDER CONTINUES -->
+  <div class="scene active-scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-founder">Founder — Continues</span>
+      <span class="scene-time">0:52 – 1:15</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Direct to Camera</p>
+      <p class="dialogue">"ZeroManual is an AI research and deployment company. The research is not a preamble — it is the thing. It is the reason what we build works when everything else has failed.<br><br>We start from inside the operational reality of an enterprise and its industry. And then we build the AI infrastructure that transforms what that business is structurally capable of."</p>
+      <p class="direction"><strong>Shot:</strong> Return to original framing. Slightly more energy than the opening — building to something.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 5: TEAM 2 -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-team">Team Member 2</span>
+      <span class="scene-time">1:15 – 1:28</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Team Member 2</p>
+      <p class="dialogue">"An enterprise that runs on ZeroManual isn't just more efficient. It processes complexity that used to require proportional headcount growth. It scales without the drag. When a competitor tries to take its market — they find the gap they expected has closed."</p>
+      <p class="direction"><strong>Shot:</strong> Walking-and-talking optional here for energy shift — or a static close-up. Confident delivery.</p>
+    </div>
+    <div class="overlay-block">
+      <p class="overlay-text">The gap they expected no longer exists.</p>
+      <p class="overlay-note">Text-only card here works well — pause on black for 1 second after this scene before cutting to Team 3.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 6: TEAM 3 -->
+  <div class="scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-team">Team Member 3</span>
+      <span class="scene-time">1:28 – 1:42</span>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Team Member 3</p>
+      <p class="dialogue">"Every quarter without serious AI infrastructure is a quarter where the competitive gap compounds. The enterprises that move now will own their categories. We're at the beginning of that window — and we're building the companies that will still be standing when it closes."</p>
+      <p class="direction"><strong>Shot:</strong> Slightly tighter. Direct. This is the urgency beat — deliver it without theatrics. Let the words carry it.</p>
+    </div>
+  </div>
+
+  <!-- SCENE 7: FOUNDER CLOSE -->
+  <div class="scene active-scene">
+    <div class="scene-header">
+      <span class="scene-tag tag-close">Founder — Close</span>
+      <span class="scene-time">1:42 – 2:20</span>
+    </div>
+    <div class="broll-block">
+      <p><strong>VISUAL:</strong> B-roll of the ZeroManual team working — informal, real. Not staged. Whiteboards, screens, conversations. Interspersed with final enterprise imagery. Music peaks here.</p>
+    </div>
+    <div class="dialogue-block">
+      <p class="speaker">Co-Founder — Voiceover / Return to Camera</p>
+      <p class="dialogue">"We're building the AI backbone of Asian industry. In the markets that power the global economy. For the enterprises that are ambitious enough to see what's at stake.<br><br>That's what ZeroManual is. That's what we're here to do.<br><br>If you're building one of those enterprises — we should talk."</p>
+      <p class="direction"><strong>Shot:</strong> Open with voiceover over B-roll, then cut back to founder direct-to-camera for the final three lines. Hold on their face for 1 full second after the last word before cutting to end card.</p>
+    </div>
+    <div class="overlay-block">
+      <p class="overlay-text">Zero Manual.<br><span style="font-size:14px;font-family:'DM Sans',sans-serif;font-style:italic;font-weight:300;color:#aaa;">The AI backbone of industry.</span></p>
+      <p class="overlay-note">Final card — warm tone, not cold black this time. Website + CTA. Hold 4 seconds.</p>
+    </div>
+  </div>
+
+  <!-- Editing Style -->
+  <div class="style-section">
+    <h3>Editing & Production Style — Script 02</h3>
+    <div class="style-grid">
+      <div class="style-item">
+        <label>Colour Grade</label>
+        <p>Warmer than Script 01. Still grounded and real — but slightly golden. Earthy tones. Think documentary about something important, not a product ad.</p>
+      </div>
+      <div class="style-item">
+        <label>Cuts</label>
+        <p>Longer takes. Fewer cuts. Let the speakers breathe. A couple of slow push-ins during key lines to build intimacy without movement.</p>
+      </div>
+      <div class="style-item">
+        <label>Music</label>
+        <p>Subtle throughout from the start — low, textured strings or ambient piano. Builds steadily. Never overpowers the voice. Peaks on final B-roll before the close.</p>
+      </div>
+      <div class="style-item">
+        <label>Text Overlays</label>
+        <p>Use sparingly — 2–3 maximum. Only for the single most important lines. When they appear, give them space. White or very light cream. Fade in, don't slam.</p>
+      </div>
+      <div class="style-item">
+        <label>Camera Movement</label>
+        <p>Slow focus racks between key moments. Handheld for team B-roll. Locked-off for dialogue. One tracking shot in the middle B-roll sequence for visual variety.</p>
+      </div>
+      <div class="style-item">
+        <label>Aspect Ratio</label>
+        <p>16:9. This one works beautifully as a full film. For social, clip the founder cold open (0:00–0:22) as a standalone teaser — ends on the hook.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════ -->
+<!--  REFERENCE VIDEOS                                  -->
+<!-- ═══════════════════════════════════════════════════ -->
+<section class="refs-section">
+  <h2>Reference Videos</h2>
+  <p>Watch these before production. Each demonstrates a specific element worth borrowing.</p>
+
+  <div class="ref-card">
+    <div class="ref-num">01</div>
+    <div class="ref-body">
+      <span class="why-tag">Manifesto tone · direct-to-camera · text overlays</span>
+      <h4>Stripe — "Increase the GDP of the internet"</h4>
+      <p class="url">youtube.com/watch?v=4tW8Y0sHMjM</p>
+      <p>Stripe's early company story video. Founder-led, minimal production, but deeply confident. The way Patrick Collison speaks directly at you — certain without being aggressive — is the exact energy Script 01 is aiming for. Study how they use silence and pauses.</p>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-num">02</div>
+    <div class="ref-body">
+      <span class="why-tag">Origin story format · warm documentary feel</span>
+      <h4>Notion — "We're building something different" (2019 Launch)</h4>
+      <p class="url">youtube.com/watch?v=gqCuCHJnoOo</p>
+      <p>Exactly the tone of Script 02. Founder speaks like a human, not a pitch deck. The B-roll of the team working is authentic and functional — not over-produced. Notice how team members add context without ever sounding like they're reading a script.</p>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-num">03</div>
+    <div class="ref-body">
+      <span class="why-tag">Problem framing · urgency · B2B enterprise energy</span>
+      <h4>Palantir — "The difference between a good decision and a great one"</h4>
+      <p class="url">youtube.com/watch?v=LtFtbVguPJY</p>
+      <p>Watch this for how a B2B enterprise AI company frames its value proposition on film — serious, specific, never dumbed down. The B-roll of complex real-world operations is exactly the visual language ZeroManual should be using.</p>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-num">04</div>
+    <div class="ref-body">
+      <span class="why-tag">Asia-focused · enterprise narrative · visual tone</span>
+      <h4>Grab — "Everyday Superapp" Brand Film</h4>
+      <p class="url">youtube.com/watch?v=kfzSWrtlgYk</p>
+      <p>For the B-roll visual language specifically. Grab shoots Southeast Asian operational reality — motorbikes, markets, logistics, people — in a way that feels authentic rather than exploitative. This is the visual register ZeroManual's B-roll should aim for.</p>
+    </div>
+  </div>
+
+  <div class="ref-card">
+    <div class="ref-num">05</div>
+    <div class="ref-body">
+      <span class="why-tag">Cold open · no-music hook · text cards</span>
+      <h4>Andreessen Horowitz — "Software is eating the world" short-form video</h4>
+      <p class="url">a16z.com / search "software eating the world video"</p>
+      <p>For the cold-open approach in Script 01 specifically. Watch how silence and ambient sound in the first 10 seconds creates more tension than any music could. The text-card cadence is also worth studying — sparse, declarative, no flourishes.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>ZeroManual Technology</span>
+  <p>Internal production document · Launch Video Scripts v1.0</p>
+</footer>
+
+</body>
+</html>
